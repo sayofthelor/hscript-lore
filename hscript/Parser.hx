@@ -676,6 +676,100 @@ class Parser {
 			}
 			var args = parseExprList(TPClose);
 			mk(ENew(a.join("."),args),p1);
+			case "import":
+				var oldReadPos = readPos;
+				var tk = token();
+				switch( tk ) {
+					case TPOpen:
+						var tok = token();
+						switch(tok) {
+							case TConst(c):
+								switch(c) {
+									case CString(s):
+										token();
+										ensure(TSemicolon);
+										push(TSemicolon);
+										mk(EImport(s), p1);
+									default:
+										unexpected(tok);
+										null;
+								}
+							default:
+								unexpected(tok);
+								null;
+						}
+					case TId(id):
+						var path = [id];
+						var t = null;
+						while( true ) {
+							t = token();
+							if( t != TDot ) {
+								push(t);
+								break;
+							}
+							t = token();
+							switch( t ) {
+							case TId(id):
+								path.push(id);
+							default:
+								unexpected(t);
+							}
+						}
+						ensure(TSemicolon);
+						push(TSemicolon);
+						var p = path.join(".");
+						mk(EImport(p),p1);
+					default:
+						unexpected(tk);
+						null;
+					}
+			case "package":
+				var oldReadPos = readPos;
+				var tk = token();
+				switch( tk ) {
+					case TPOpen:
+						var tok = token();
+						switch(tok) {
+							case TConst(c):
+								switch(c) {
+									case CString(s):
+										token();
+										ensure(TSemicolon);
+										push(TSemicolon);
+										mk(EPackage(s), p1);
+									default:
+										unexpected(tok);
+										null;
+								}
+							default:
+								unexpected(tok);
+								null;
+						}
+					case TId(id):
+						var path = [id];
+						var t = null;
+						while( true ) {
+							t = token();
+							if( t != TDot ) {
+								push(t);
+								break;
+							}
+							t = token();
+							switch( t ) {
+							case TId(id):
+								path.push(id);
+							default:
+								unexpected(t);
+							}
+						}
+						ensure(TSemicolon);
+						push(TSemicolon);
+						var p = path.join(".");
+						mk(EPackage(p),p1);
+					default:
+						unexpected(tk);
+						null;
+					}
 		case "throw":
 			var e = parseExpr();
 			mk(EThrow(e),p1,pmax(e));

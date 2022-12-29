@@ -43,6 +43,8 @@ enum ExprDef {
 typedef ExprDef = Expr;
 enum Expr {
 #end
+	EImport( c : String );
+	EPackage( ?c : String );
 	EConst( c : Const );
 	EIdent( v : String );
 	EVar( n : String, ?t : CType, ?e : Expr );

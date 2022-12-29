@@ -23,6 +23,7 @@ package hscript;
 import haxe.PosInfos;
 import hscript.Expr;
 import haxe.Constraints.IMap;
+using StringTools;
 
 private enum Stop {
 	SBreak;
@@ -323,6 +324,25 @@ class Interp {
 		var e = e.e;
 		#end
 		switch( e ) {
+		case EPackage(c):
+			return null;
+		case EImport(c):
+			var splitClassName:Array<String> = [for (s in c.split(".")) s.trim()];
+			if (variables.exists(splitClassName[splitClassName.length - 1])) {
+				trace('Class ${splitClassName[splitClassName.length - 1]} already exists in the current script!');
+				return true;
+			}
+			var realClassName:String = splitClassName.join(".");
+			var classThing:Class<Dynamic> = Type.resolveClass(realClassName);
+			var enumThing:Enum<Dynamic> = Type.resolveEnum(realClassName);
+			if (classThing == null && enumThing == null) {
+				openfl.Lib.application.window.alert('Class / Enum at $realClassName does not exist.', 'Haxe script error');
+				return false;
+			}
+			else {
+				variables.set(splitClassName[splitClassName.length - 1], classThing != null ? classThing : enumThing);
+				return true;
+			}
 		case EConst(c):
 			switch( c ) {
 			case CInt(v): return v;

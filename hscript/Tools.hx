@@ -27,6 +27,7 @@ class Tools {
 	public static function iter( e : Expr, f : Expr -> Void ) {
 		switch( expr(e) ) {
 		case EConst(_), EIdent(_):
+		case EImport(c): f(e);
 		case EVar(_, _, e): if( e != null ) f(e);
 		case EParent(e): f(e);
 		case EBlock(el): for( e in el ) f(e);
@@ -57,6 +58,8 @@ class Tools {
 			if( def != null ) f(def);
 		case EMeta(name, args, e): if( args != null ) for( a in args ) f(a); f(e);
 		case ECheckType(e,_): f(e);
+		case _:
+			throw "Not implemented";
 		}
 	}
 
@@ -86,6 +89,9 @@ class Tools {
 		case ESwitch(e, cases, def): ESwitch(f(e), [for( c in cases ) { values : [for( v in c.values ) f(v)], expr : f(c.expr) } ], def == null ? null : f(def));
 		case EMeta(name, args, e): EMeta(name, args == null ? null : [for( a in args ) f(a)], f(e));
 		case ECheckType(e,t): ECheckType(f(e), t);
+		case EImport(c): EImport(c);
+		case _:
+			throw "Not implemented";
 		}
 		return mk(edef, e);
 	}

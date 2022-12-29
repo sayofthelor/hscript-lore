@@ -114,6 +114,8 @@ class Printer {
 			return;
 		}
 		switch( #if hscriptPos e.e #else e #end ) {
+		case EImport(c):
+			add("import " + c);
 		case EConst(c):
 			switch( c ) {
 			case CInt(i): add(i);
@@ -322,6 +324,7 @@ class Printer {
 			add(" : ");
 			addType(t);
 			add(")");
+		case _:
 		}
 	}
 
