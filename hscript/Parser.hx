@@ -69,12 +69,12 @@ class Parser {
 	/**
 		allow types declarations
 	**/
-	public var allowTypes : Bool;
+	public var allowTypes : Bool = true;
 
 	/**
 		allow haxe metadata declarations
 	**/
-	public var allowMetadata : Bool;
+	public var allowMetadata : Bool = true;
 
 	/**
 		resume from parsing errors (when parsing incomplete code, during completion for example)

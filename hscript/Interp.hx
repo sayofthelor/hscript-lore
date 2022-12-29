@@ -33,6 +33,21 @@ private enum Stop {
 
 class Interp {
 
+	public function callMethod(name:String, args:Array<Dynamic> = null) {
+		if (args == null) args = [];
+		var func = variables.get(name);
+		if (func == null) {
+			trace('No variable named $func found!');
+			return null;
+		}
+		if (!Reflect.isFunction(func)) {
+			trace('Variable $func is not a function!');
+			return null;
+		}
+		if (args.length < 1) return func();
+		else return Reflect.callMethod(null, func, args);
+	}
+	
 	#if haxe3
 	public var variables : Map<String,Dynamic>;
 	var locals : Map<String,{ r : Dynamic }>;
