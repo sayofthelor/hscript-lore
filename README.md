@@ -77,5 +77,6 @@ interp.callMethod('doHelloTest');
   output should be:
   hscript:23: Hello from the outer script...
   hscript:3: ...and hello from the inner script!
+  Fun fact, throw this in a script file with a few extra imports and it works just fine!
 */
 ```
