@@ -21,6 +21,7 @@
  */
 package hscript;
 import hscript.Expr;
+using StringTools;
 
 enum Token {
 	TEof;
@@ -182,7 +183,10 @@ class Parser {
 
 	public function parseString( s : String, ?origin : String = "hscript" ) {
 		initParser(origin);
-		input = s;
+		if (s.startsWith("package;")) 
+			input = s.substr(0, 8)
+		else 
+			input = s;
 		readPos = 0;
 		var a = new Array();
 		while( true ) {
