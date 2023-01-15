@@ -333,6 +333,8 @@ class Interp {
 		return v;
 	}
 
+	public static var deniedClasses:Array<Class<Dynamic>> = [];
+
 	public function expr( e : Expr ) : Dynamic {
 		#if hscriptPos
 		curExpr = e;
@@ -343,6 +345,10 @@ class Interp {
 			return null;
 		case EImport(c):
 			var splitClassName:Array<String> = [for (s in c.split(".")) s.trim()];
+			if (deniedClasses.contains(Type.resolveClass(c))) {
+				throw new haxe.Exception('Class ${splitClassName[splitClassName.length - 1]} is not allowed to be imported!');
+				return false;
+			}
 			if (variables.exists(splitClassName[splitClassName.length - 1])) {
 				trace('Class ${splitClassName[splitClassName.length - 1]} already exists in the current script!');
 				return true;
