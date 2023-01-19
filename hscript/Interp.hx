@@ -111,7 +111,6 @@ class Interp {
 		#else
 		binops = new Hash();
 		#end
-		binops.set("is", function(e1,e2) return Std.isOfType(me.expr(e1), me.expr(e2)));
 		binops.set("+",function(e1,e2) return me.expr(e1) + me.expr(e2));
 		binops.set("-",function(e1,e2) return me.expr(e1) - me.expr(e2));
 		binops.set("*",function(e1,e2) return me.expr(e1) * me.expr(e2));
