@@ -6,5 +6,5 @@
   "version": "2.5.0",
   "releasenote": "Haxe 4.2 compat and bug fixes",
   "contributors": ["ncannasse","HaxeFoundation"],
-  "dependencies": {"openfl": ""}
+  "dependencies": {}
 }

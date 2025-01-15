@@ -335,6 +335,8 @@ class Interp {
 
 	public static var deniedClasses:Array<Class<Dynamic>> = [];
 
+	public static var errorFunction:String->Void = null;
+
 	public function expr( e : Expr ) : Dynamic {
 		#if hscriptPos
 		curExpr = e;
@@ -357,7 +359,7 @@ class Interp {
 			var classThing:Class<Dynamic> = Type.resolveClass(realClassName);
 			var enumThing:Enum<Dynamic> = Type.resolveEnum(realClassName);
 			if (classThing == null && enumThing == null) {
-				openfl.Lib.application.window.alert('Class / Enum at $realClassName does not exist.', 'Haxe script error');
+				if (errorFunction != null) errorFunction('Class / Enum at $realClassName does not exist.');
 				return false;
 			}
 			else {
